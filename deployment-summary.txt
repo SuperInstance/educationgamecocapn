@@ -1,0 +1,48 @@
+Cocapn Hybrid IDE - Deployment Summary
+========================================
+
+Date: Sat Jan 17 19:32:07 AKST 2026
+Version: 1.0.0
+Cloudflare Account ID: 049ff5e84ecf636b53b162cbb580aae6
+
+LIVE URLs:
+- Main Application: https://cocapn-hybrid-ide.casey-digennaro.workers.dev
+- Developer Backend: https://cocapn-dev-backend.casey-digennaro.workers.dev
+- Test Suite: https://cocapn-hybrid-ide.casey-digennaro.workers.dev/test.html
+
+Login Credentials:
+- Beta Tester: magnus / tryme
+- Developer: casey / fixme
+
+API Endpoints:
+- Production: https://cocapn-hybrid-ide.casey-digennaro.workers.dev/api/*
+- Development: https://cocapn-dev-backend.casey-digennaro.workers.dev/api/*
+
+Features Available:
+- 18 AI-powered agents
+- Real-time collaboration
+- STEM learning tools
+- Performance optimization
+- Enterprise security
+- Professional UI/UX
+
+Environment Variables:
+- CF_ACCOUNT_ID: 049ff5e84ecf636b53b162cbb580aae6
+- ENVIRONMENT: production/development
+
+Deployment Commands:
+- wrangler deploy --env production
+- wrangler deploy --env development
+- npm run test
+
+Next Steps:
+1. Configure custom domain cocapn.ai in Cloudflare Dashboard
+2. Update DNS records to point to workers.dev URLs
+3. Test the login credentials
+4. Explore the AI agents and features
+
+Support:
+- Email: support@cocapn.ai
+- Discord: https://discord.cocapn.com
+- Documentation: https://cocapn.com/docs
+

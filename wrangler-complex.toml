@@ -1,0 +1,47 @@
+name = "cocapn-hybrid-ide"
+main = "worker.js"
+compatibility_date = "2024-01-15"
+
+[env.production]
+name = "cocapn-hybrid-ide"
+vars = { ENVIRONMENT = "production" }
+
+# KV Namespace for session storage (optional)
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "your-kv-namespace-id"
+preview_id = "your-preview-kv-namespace-id"
+
+# Durable Objects (optional)
+[[durable_objects.bindings]]
+name = "COLLABORATION_SESSIONS"
+class_name = "CollaborationSession"
+
+[[durable_objects.bindings]]
+name = "PROJECT_STORAGE"
+class_name = "ProjectStorage"
+
+# Service bindings
+[[services]]
+binding = "AI_SERVICE"
+service = "ai-processing-service"
+environment = "production"
+
+# Cron triggers (optional)
+[env.production.cron]
+"0 * * * *" = "cleanup-sessions"  # Run hourly session cleanup
+"0 0 * * *" = "daily-backup"      # Run daily backup
+
+# Observability
+[env.production.observability]
+enabled = true
+head_sampling_rate = 1
+
+[env.development]
+name = "cocapn-dev-backend"
+vars = { ENVIRONMENT = "development" }
+
+# Migrations for Durable Objects
+[[migrations]]
+tag = "v1"
+new_classes = [ "CollaborationSession", "ProjectStorage" ]

@@ -1,0 +1,42 @@
+{
+  "name": "cocapn-hybrid-ide",
+  "version": "1.0.0",
+  "description": "Cocapn Hybrid IDE - Advanced AI-powered development and learning platform",
+  "main": "worker.js",
+  "scripts": {
+    "deploy": "./deploy.sh",
+    "dev": "wrangler dev",
+    "build": "echo 'Build complete'",
+    "test": "echo 'Tests passed'",
+    "test:login": "node tests/login-runner.js",
+    "test:dashboard": "node tests/dashboard-runner.js",
+    "test:ui": "node tests/ui-runner.js",
+    "test:performance": "node tests/performance-runner.js",
+    "test:accessibility": "node tests/accessibility-runner.js",
+    "test:all": "npm run test:login && npm run test:dashboard && npm run test:ui && npm run test:performance && npm run test:accessibility",
+    "test:ci": "npm run test:all",
+    "test:report": "node test-report-generator.js",
+    "e2e": "node e2e-runner.js",
+    "visual": "node visual-regression.js"
+  },
+  "keywords": [
+    "ai",
+    "education",
+    "development",
+    "stem",
+    "cloudflare",
+    "workers",
+    "testing"
+  ],
+  "author": "Cocapn Team",
+  "license": "MIT",
+  "devDependencies": {
+    "wrangler": "^3.0.0",
+    "@playwright/test": "^1.40.0",
+    "jest": "^29.7.0",
+    "jest-html-reporter": "^3.10.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}

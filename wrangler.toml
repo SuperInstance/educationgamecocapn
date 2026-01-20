@@ -1,0 +1,11 @@
+name = "cocapn-hybrid-ide"
+main = "worker.js"
+compatibility_date = "2024-01-15"
+
+[env.production]
+name = "cocapn-hybrid-ide"
+vars = { ENVIRONMENT = "production" }
+
+[env.development]
+name = "cocapn-dev-backend"
+vars = { ENVIRONMENT = "development" }

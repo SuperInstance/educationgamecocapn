@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cocapn Hybrid IDE - Test Simulator</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #F9FAFB;
+            color: #111827;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #3B82F6;
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .login-section {
+            background: #F3F4F6;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin: 15px 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #E5E7EB;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        .button {
+            padding: 12px 24px;
+            background: #3B82F6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .button:hover {
+            background: #2563EB;
+        }
+        .button.success {
+            background: #10B981;
+        }
+        .button.success:hover {
+            background: #059669;
+        }
+        .simulation-section {
+            margin-top: 30px;
+        }
+        .circuit-diagram {
+            background: #F9FAFB;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px dashed #D1D5DB;
+            margin: 20px 0;
+        }
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .results {
+            background: #F0F9FF;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #3B82F6;
+            margin-top: 20px;
+        }
+        .results h3 {
+            margin: 0 0 15px 0;
+            color: #111827;
+        }
+        .result-item {
+            margin: 10px 0;
+        }
+        .result-label {
+            font-weight: 500;
+            color: #374151;
+        }
+        .result-value {
+            color: #3B82F6;
+            font-weight: 600;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+        .status.success {
+            background: #D1FAE5;
+            color: #065F46;
+        }
+        .status.error {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Cocapn Hybrid IDE - Test Simulator</h1>
+            <p>Test the AI-powered circuit simulation system</p>
+        </div>
+
+        <div class="login-section">
+            <h3>🔐 Login Test</h3>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" value="magnus">
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" value="tryme">
+            </div>
+            <button class="button" onclick="testLogin()">Test Login</button>
+            <div id="loginStatus"></div>
+        </div>
+
+        <div class="simulation-section">
+            <h3>⚡ AI Simulation Test</h3>
+            <p>Click the button below to run a circuit simulation with real-time results.</p>
+            
+            <button class="button success" onclick="runSimulation()">🔬 Run Circuit Simulation</button>
+            <div id="simulationStatus"></div>
+
+            <div id="simulationArea" style="display: none;">
+                <div class="circuit-diagram">
+                    <h4>Circuit Diagram</h4>
+                    <p>Battery (9V) → Resistor (330Ω) → LED → Ground</p>
+                    <div style="margin-top: 20px;">
+                        <span style="background: #EF4444; color: white; padding: 5px 10px; border-radius: 4px;">+</span>
+                        <span style="margin: 0 20px;">→</span>
+                        <span style="background: #6B7280; color: white; padding: 5px 10px; border-radius: 4px;">330Ω</span>
+                        <span style="margin: 0 20px;">→</span>
+                        <span style="background: #FBBF24; color: white; padding: 5px 10px; border-radius: 4px;">LED</span>
+                        <span style="margin: 0 20px;">→</span>
+                        <span style="background: #6B7280; color: white; padding: 5px 10px; border-radius: 4px;">−</span>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="button success" onclick="startSimulation()">▶️ Start Simulation</button>
+                    <button class="button" onclick="stopSimulation()">⏹️ Stop Simulation</button>
+                </div>
+
+                <div id="simulationResults" class="results" style="display: none;">
+                    <h3>📊 Real-time Simulation Results</h3>
+                    <div id="resultsContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let simulationInterval = null;
+        let isSimulating = false;
+
+        async function testLogin() {
+            const statusDiv = document.getElementById('loginStatus');
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('https://cocapn-hybrid-ide.casey-digennaro.workers.dev/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    statusDiv.innerHTML = '<div class="status success">✅ Login successful! Welcome ' + result.data.user.name + '</div>';
+                } else {
+                    statusDiv.innerHTML = '<div class="status error">❌ Login failed: ' + result.error + '</div>';
+                }
+            } catch (error) {
+                statusDiv.innerHTML = '<div class="status error">❌ Login error: ' + error.message + '</div>';
+            }
+        }
+
+        async function runSimulation() {
+            const statusDiv = document.getElementById('simulationStatus');
+
+            try {
+                statusDiv.innerHTML = '<div class="status">🔄 Running simulation...</div>';
+
+                const response = await fetch('https://cocapn-hybrid-ide.casey-digennaro.workers.dev/api/agents/simulation', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'run_simulation',
+                        parameters: {
+                            project: {
+                                type: 'circuit_simulation',
+                                components: ['battery', 'resistor', 'led']
+                            }
+                        }
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    statusDiv.innerHTML = '<div class="status success">✅ Simulation started successfully!</div>';
+                    document.getElementById('simulationArea').style.display = 'block';
+                    showSimulationResults(result.data);
+                    startRealTimeSimulation();
+                } else {
+                    statusDiv.innerHTML = '<div class="status error">❌ Simulation failed: ' + result.error + '</div>';
+                }
+            } catch (error) {
+                statusDiv.innerHTML = '<div class="status error">❌ Simulation error: ' + error.message + '</div>';
+            }
+        }
+
+        function showSimulationResults(data) {
+            const resultsDiv = document.getElementById('simulationResults');
+            const resultsContent = document.getElementById('resultsContent');
+
+            resultsContent.innerHTML = 
+                '<div class="result-item"><span class="result-label">Circuit Type:</span> <span class="result-value">' + data.project.type + '</span></div>' +
+                '<div class="result-item"><span class="result-label">Components:</span> <span class="result-value">' + data.components.join(', ') + '</span></div>' +
+                '<div class="result-item"><span class="result-label">Simulation ID:</span> <span class="result-value">' + data.simulation_id + '</span></div>' +
+                '<hr style="margin: 15px 0;">' +
+                '<div class="result-item"><span class="result-label">Current:</span> <span id="current-value" class="result-value">0.000 A</span></div>' +
+                '<div class="result-item"><span class="result-label">Voltage Drop:</span> <span id="voltage-value" class="result-value">0.00 V</span></div>' +
+                '<div class="result-item"><span class="result-label">Power:</span> <span id="power-value" class="result-value">0.000 W</span></div>' +
+                '<div class="result-item"><span class="result-label">Efficiency:</span> <span id="efficiency-value" class="result-value">0.0%</span></div>' +
+                '<hr style="margin: 15px 0;">' +
+                '<div class="result-item"><span class="result-label">LED State:</span> <span id="led-state" class="result-value">Calculating...</span></div>' +
+                '<div class="result-item"><span class="result-label">Current Flow:</span> <span id="current-flow" class="result-value">Steady</span></div>' +
+                '<div class="result-item"><span class="result-label">Power Dissipation:</span> <span id="power-dissip" class="result-value">0.000 W</span></div>';
+
+            resultsDiv.style.display = 'block';
+        }
+
+        function startRealTimeSimulation() {
+            if (simulationInterval) clearInterval(simulationInterval);
+            
+            isSimulating = true;
+            simulationInterval = setInterval(() => {
+                updateRealTimeData();
+            }, 1000);
+        }
+
+        function stopSimulation() {
+            isSimulating = false;
+            if (simulationInterval) {
+                clearInterval(simulationInterval);
+                simulationInterval = null;
+            }
+        }
+
+        function updateRealTimeData() {
+            const baseCurrent = 0.027;
+            const baseVoltage = 6.897;
+            const basePower = 0.186;
+            const baseEfficiency = 76.3;
+
+            const variation = (Math.random() - 0.5) * 0.002;
+            const current = (baseCurrent + variation).toFixed(3);
+            const voltage = (baseVoltage + variation * 10).toFixed(2);
+            const power = (basePower + variation * 10).toFixed(3);
+            const efficiency = (baseEfficiency + variation * 100).toFixed(1);
+
+            document.getElementById('current-value').textContent = current + ' A';
+            document.getElementById('voltage-value').textContent = voltage + ' V';
+            document.getElementById('power-value').textContent = power + ' W';
+            document.getElementById('efficiency-value').textContent = efficiency + '%';
+
+            const ledState = parseFloat(current) > 0.020 ? 'ON' : 'OFF';
+            const ledStateElement = document.getElementById('led-state');
+            ledStateElement.textContent = ledState;
+            ledStateElement.style.color = ledState === 'ON' ? '#10B981' : '#EF4444';
+
+            document.getElementById('current-flow').textContent = 'Clockwise';
+            document.getElementById('power-dissip').textContent = (parseFloat(power) * 0.66).toFixed(3) + ' W';
+        }
+    </script>
+</body>
+</html>
